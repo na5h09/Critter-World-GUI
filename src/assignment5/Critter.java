@@ -1,4 +1,5 @@
-/* CRITTERS Critter.java
+/*
+ * CRITTERS Critter.java
  * EE422C Project 5 submission by
  * Replace <...> with your actual data.
  * <Student1 Name>
@@ -8,7 +9,7 @@
  * <Student2 EID>
  * <Student2 5-digit Unique No.>
  * Slip days used: <0>
- * Spring 2020
+ * Spring 2019
  */
 
 package assignment5;
