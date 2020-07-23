@@ -395,10 +395,12 @@ public abstract class Critter {
                 if(d1 >= d2)  { // arbitrarily pick c1 as winner if equal damage rolls
                     c1.energy += c2.energy/2;
                     c2.energy = 0;
+                    population.remove(c2); // dead from fight so remove in this step
                 }
                 else if(d1 < d2) { // c1 dead
                     c2.energy += c1.energy/2;
                     c1.energy = 0;
+                    population.remove(c1); // dead from fight so remove in this step;
                     break;
                 }
               }
