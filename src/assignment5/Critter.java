@@ -164,6 +164,8 @@ public abstract class Critter {
           default: break;
         }
 
+        if(tempx == this.x_coord && tempy == this.y_coord)
+          return null;
         return occBy(tempx, tempy);
 
     }
