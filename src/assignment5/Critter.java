@@ -14,6 +14,8 @@
 
 package assignment5;
 
+import javafx.*; // change later to what we need
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
