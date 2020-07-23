@@ -330,6 +330,7 @@ public abstract class Critter {
     	this.move(direction);
     	this.energy = this.energy - Params.WALK_ENERGY_COST;
     }
+	
     /**
      * using the direction from the parameter the walk method calls the move method twice
      * and deducts the respective energy from the critter
@@ -341,6 +342,7 @@ public abstract class Critter {
     	this.move(direction);
     	this.energy = this.energy - Params.RUN_ENERGY_COST;
     }
+	
     /**
      * the move method is called by either the walk or run methods, which input a specific direction
      * for the critter to move in. This method uses a switch statement to decide which way to move.
@@ -404,6 +406,7 @@ public abstract class Critter {
 
     	this.moved = true;
     }
+	
    /**
     * The reproduce function checks to see if the critter has enough energy to reproduce.
     * If it does then it will give half of it's energy to the offspring and place it somewhere within it's radius.
