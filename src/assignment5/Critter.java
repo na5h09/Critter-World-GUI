@@ -64,8 +64,127 @@ public abstract class Critter {
 
     public abstract CritterShape viewShape();
 
+    /**
+     * checks if a space is occupied based on direction
+     * and number of steps in that direction
+     *
+     * @param direction
+     * @param steps
+     */
     protected final String look(int direction, boolean steps) {
-        return "";
+
+        int tempx = this.x_coord;
+        int tempy = this.y_coord;
+
+        switch(direction) {
+          case 0:
+            if(!steps) {
+              tempx++;
+            }
+            else if(steps) {
+              tempx++;
+              tempx++;
+            }
+            break;
+          case 1:
+            if(!steps) {
+              tempx++;
+              tempy++;
+            }
+            else if(steps) {
+              tempx++;
+              tempx++;
+              tempy++;
+              tempy++;
+            }
+            break;
+          case 2:
+            if(!steps) {
+              tempy++;
+            }
+            else if(steps) {
+              tempy++;
+              tempy++;
+            }
+            break;
+          case 3:
+            if(!steps) {
+              tempx--;
+              tempy++;
+            }
+            else if(steps) {
+              tempx--;
+              tempx--;
+              tempy++;
+              tempy++;
+            }
+            break;
+          case 4:
+            if(!steps) {
+              tempx--;
+            }
+            if(steps) {
+              tempx--;
+              tempx--;
+            }
+            break;
+          case 5:
+            if(!steps) {
+              tempx--;
+              tempy--;
+            }
+            else if(steps) {
+              tempx--;
+              tempx--;
+              tempy--;
+              tempy--;
+            }
+            break;
+          case 6:
+            if(!steps) {
+              tempy--;
+            }
+            else if(steps) {
+              tempy--;
+              tempy--;
+            }
+            break;
+          case 7:
+            if(!steps) {
+              tempx++;
+              tempy--;
+            }
+            else if(steps) {
+              tempx++;
+              tempx++;
+              tempy--;
+              tempy--;
+            }
+            break;
+          default: break;
+        }
+
+        return occBy(tempx, tempy);
+
+    }
+
+    /**
+     * goes through population and checks if a Critter
+     * occupies a specific coordinate from look
+     *
+     * @param x
+     * @param y
+     */
+    private String occBy(int x, int y) {
+
+      for(int i = 0; i < population.size(); i++) {
+        Critter c = population.get(i);
+        if(x == c.x_coord && y == c.y_coord)
+          return c.toString();
+      }
+
+      return null;
+
     }
 
     public static String runStats(List<Critter> critters) {
@@ -332,7 +451,6 @@ public abstract class Critter {
     	this.move(direction);
     	this.energy = this.energy - Params.WALK_ENERGY_COST;
     }
-	
     /**
      * using the direction from the parameter the walk method calls the move method twice
      * and deducts the respective energy from the critter
@@ -344,7 +462,6 @@ public abstract class Critter {
     	this.move(direction);
     	this.energy = this.energy - Params.RUN_ENERGY_COST;
     }
-	
     /**
      * the move method is called by either the walk or run methods, which input a specific direction
      * for the critter to move in. This method uses a switch statement to decide which way to move.
@@ -408,7 +525,7 @@ public abstract class Critter {
 
     	this.moved = true;
     }
-	
+
    /**
     * The reproduce function checks to see if the critter has enough energy to reproduce.
     * If it does then it will give half of it's energy to the offspring and place it somewhere within it's radius.
