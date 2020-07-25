@@ -16,7 +16,9 @@ package assignment5;
 
 import javafx.*; // change later to what we need
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -203,6 +205,8 @@ public abstract class Critter {
 			rest is unchanged from Project 4 */
 
     private int energy = 0;
+    
+    private Boolean moved = false;
 
     private int x_coord;
     private int y_coord;
