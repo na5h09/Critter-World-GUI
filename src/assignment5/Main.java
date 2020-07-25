@@ -3,16 +3,22 @@ package assignment5;
 import java.io.File;
 import java.util.ArrayList;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Main extends Application {
 	
 	public static String myPackage = Main.class.getPackage().toString().split(" ")[1];
+	private Boolean animating = false;
+	//used from http://www.java2s.com/Tutorials/Java/JavaFX/1010__JavaFX_Timeline_Animation.htm
+	public Timeline aniWorld = new Timeline();
 
     public static void main(String[] args) {
         // launch(args);
@@ -138,6 +144,62 @@ public class Main extends Application {
     	
     	//add controls to control pane
     	ctPane.getChildren().addAll(make, makeTF, create, seedTF, seed, stepTF, timeStep);
+    	ctrl.setContent(ctPane);
+    	
+    	//animation tab
+    	//animation function
+    	Label ani = new Label("Step Animation");
+    	anPane.addRow(0, ani);
+    	
+    	Slider anislide = new Slider(0, 10, 5);
+    	anislide.setShowTickMarks(true);
+    	anislide.setShowTickLabels(true);
+    	anislide.setBlockIncrement(1);
+    	anislide.setMajorTickUnit(1);
+    	GridPane.setConstraints(anislide, 0, 1);
+    	
+    	Button animateGo = new Button("Start");
+    	GridPane.setConstraints(animateGo, 1, 1);
+    	
+    	animateGo.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent event) {
+    			create.setDisable(true);
+    			seed.setDisable(true);
+    			timeStep.setDisable(true);
+    			double frame = anislide.getValue();
+    			animating = true;
+    			Duration dur = Duration.millis(1000);
+    			KeyFrame key = new KeyFrame(dur, new EventHandler<ActionEvent>() {
+    				@Override
+    				public void handle(ActionEvent e) {
+    					for(int i = 0; i < frame; i++) {
+    						Critter.worldTimeStep();
+    					}
+    					//write stats and display world functions
+    				}
+    			
+    			});
+    			
+    			aniWorld.getKeyFrames().add(key);
+    			aniWorld.setCycleCount(Timeline.INDEFINITE);
+    			aniWorld.play();
+    		}});
+    	
+    	Button animateStop = new Button("Stop");
+    	GridPane.setConstraints(animateStop, 2, 1);
+    	
+    	animateStop.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent event) {
+    			create.setDisable(false);
+    			seed.setDisable(false);
+    			timeStep.setDisable(false);
+    			aniWorld.stop();
+    		}});
+    	
+    	anPane.getChildren().addAll(anislide, animateGo, animateStop);
+    	anime.setContent(anPane);
     	
     	//add all to splitpane which will be scene for stage
     	SplitPane sp = new SplitPane();
