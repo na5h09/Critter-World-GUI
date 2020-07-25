@@ -18,9 +18,13 @@ import javafx.*; // change later to what we need
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
+import assignment5.Critter;
 
 /*
  * See the PDF for descriptions of the methods and fields in this
@@ -193,7 +197,9 @@ public abstract class Critter {
 
     public static String runStats(List<Critter> critters) {
         // TODO Implement this method
-        return null;
+    	String stats = new String ("" + critters.size() + " critters as follows -- " + critters.get(0).toString() +
+    			":" + critters.size());
+        return stats;
     }
 
 
