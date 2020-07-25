@@ -16,7 +16,7 @@ import javafx.util.Duration;
 public class Main extends Application {
 	
 	public static String myPackage = Main.class.getPackage().toString().split(" ")[1];
-	private Boolean animating = false;
+	public static ArrayList<Label> Stats = new ArrayList<Label>();
 	//used from http://www.java2s.com/Tutorials/Java/JavaFX/1010__JavaFX_Timeline_Animation.htm
 	public Timeline aniWorld = new Timeline();
 
@@ -168,7 +168,6 @@ public class Main extends Application {
     			seed.setDisable(true);
     			timeStep.setDisable(true);
     			double frame = anislide.getValue();
-    			animating = true;
     			Duration dur = Duration.millis(1000);
     			KeyFrame key = new KeyFrame(dur, new EventHandler<ActionEvent>() {
     				@Override
@@ -200,6 +199,30 @@ public class Main extends Application {
     	
     	anPane.getChildren().addAll(anislide, animateGo, animateStop);
     	anime.setContent(anPane);
+    	
+    	//stats tab
+    	//runstats checkboxes
+    	Label runStats = new Label("Critter Statistics:");
+    	stPane.addRow(0, runStats);
+    	
+    	for(int i = 0; i < critterChoices.size(); i++) {
+    		CheckBox critterStat = new CheckBox(critterChoices.get(i));
+    		stPane.add(critterStat, 0, i + 1);
+    		Label data = new Label("N/A");
+    		data.setVisible(false);
+    		Stats.add(data);
+    		stPane.add(data, 1, i + 1);
+    		critterStat.setOnAction(new EventHandler<ActionEvent>() {
+    			@Override
+    			public void handle(ActionEvent e) {
+    				if(critterStat.isSelected()) {
+    					data.setVisible(true);
+    				} else {
+    					data.setVisible(false);
+    				}
+    			}
+    		});
+    	}
     	
     	//add all to splitpane which will be scene for stage
     	SplitPane sp = new SplitPane();
