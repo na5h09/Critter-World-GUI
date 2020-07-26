@@ -1,14 +1,20 @@
 package assignment5;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
+import assignment5.Critter;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -17,11 +23,13 @@ public class Main extends Application {
 	
 	public static String myPackage = Main.class.getPackage().toString().split(" ")[1];
 	public static ArrayList<Label> Stats = new ArrayList<Label>();
+	public static ArrayList<String> critterChoices;
+	public static GridPane critWorld = new GridPane();
 	//used from http://www.java2s.com/Tutorials/Java/JavaFX/1010__JavaFX_Timeline_Animation.htm
 	public Timeline aniWorld = new Timeline();
 
     public static void main(String[] args) {
-        // launch(args);
+        launch(args);
     }
     
     public void start(Stage primaryStage) throws Exception {
@@ -39,15 +47,19 @@ public class Main extends Application {
     	stats.setText("Statistics");
     	//create gridpanes for each tab
     	GridPane ctPane = new GridPane();
+    	ctPane.setPadding(new Insets(5, 5, 5,5));
+    	//ctPane.setHgap(value);
     	GridPane anPane = new GridPane();
+    	anPane.setPadding(new Insets(5, 5, 5,5));
     	GridPane stPane = new GridPane();
+    	stPane.setPadding(new Insets(5, 5, 5,5));
     	
     	//control tab
     	//make critter function
     	Label makeCrit = new Label("Make Critters");
     	ctPane.addRow(0, makeCrit);
     	
-    	ArrayList<String> critterChoices = critterClasses();
+    	critterChoices = critterClasses();
     	
     	ChoiceBox<String> make = new ChoiceBox<String>();
     	make.getItems().addAll(critterChoices);
@@ -73,7 +85,8 @@ public class Main extends Application {
     				for(int i = 0; i < num; i++) {
     					Critter.createCritter(make.getValue().toString());
     				}
-    				//need to write display function and runStats function
+    				//need to write display function
+    				statUpdate();
     			} catch (NumberFormatException | InvalidCritterException e) {
     				System.out.println("Error Creating Critters");
     			}
@@ -134,7 +147,8 @@ public class Main extends Application {
     				for(int i = 0; i < num; i++) {
     					Critter.worldTimeStep();
     				}
-    				//need to write display function and runStats function
+    				//need to write display function
+    				statUpdate();
     			} catch (NumberFormatException e) {
     				System.out.println("Error in Time Step");
     			}
@@ -175,7 +189,8 @@ public class Main extends Application {
     					for(int i = 0; i < frame; i++) {
     						Critter.worldTimeStep();
     					}
-    					//write stats and display world functions
+    					//write display world functions
+    					statUpdate();
     				}
     			
     			});
@@ -224,8 +239,25 @@ public class Main extends Application {
     		});
     	}
     	
+    	stats.setContent(stPane);
+    	
+    	//add all tabs
+    	tb.getTabs().addAll(ctrl, anime, stats);
+    	
+    	//set Critter World
+    	critWorld.setMinSize(Params.WORLD_WIDTH, Params.WORLD_HEIGHT);
+    	critWorld.setMaxSize(Params.WORLD_WIDTH * 5, Params.WORLD_HEIGHT * 5);
+    	critWorld.setBackground(Background.EMPTY);
+    	critWorld.setPadding(new Insets(10,10,10,10));
+    	critWorld.setGridLinesVisible(true);
+    	Critter.displayWorld();
+    	
     	//add all to splitpane which will be scene for stage
-    	SplitPane sp = new SplitPane();
+    	SplitPane sp = new SplitPane(tb, critWorld);
+    	
+    	Scene scene = new Scene(sp, 500, 400);
+    	primaryStage.setScene(scene);
+    	primaryStage.show();
     }
     
     private ArrayList<String> critterClasses() {
@@ -253,9 +285,7 @@ public class Main extends Application {
             Class<?> critClass = Class.forName(myPackage + "." + name);
             critInstance = critClass.getConstructor().newInstance();
             }
-            catch (InstantiationException | NoSuchMethodException | ClassNotFoundException e) {
-            	// These are alright.
-            }
+            catch (InstantiationException | NoSuchMethodException | ClassNotFoundException e) {}
         	catch (Exception e) {}
             if(Critter.class.isInstance(critInstance)) {
             	critters.add(name);
@@ -263,6 +293,21 @@ public class Main extends Application {
         }
 
         return critters;
+    }
+    
+    public void statUpdate() {
+    	for(int i = 0; i <  critterChoices.size(); i++) {
+    		String newStats = "N/A";
+    		try {
+    			List<Critter> instlist = Critter.getInstances(critterChoices.get(i));
+    			Class<?> crit = Class.forName(myPackage + "." + critterChoices.get(i));
+    			Method stat = crit.getMethod("runStats", List.class);
+    			Object crinstance = crit.newInstance();
+    			newStats = (String)stat.invoke(crinstance, instlist);
+    		} catch(Exception e) {}
+    		
+    		Stats.get(i).setText(newStats);
+    	}
     }
 }
 

@@ -15,6 +15,12 @@
 package assignment5;
 
 import javafx.*; // change later to what we need
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -203,8 +209,17 @@ public abstract class Critter {
     }
 
 
-    public static void displayWorld(Object pane) {
+    public static void displayWorld() {
         // TODO Implement this method
+    	Main.critWorld.getChildren().clear();
+    	for(Critter c: population) {
+    		if(Main.critWorld.contains((double)c.x_coord, (double)c.y_coord)) {
+    			continue;
+    		} else {
+    			place(c.viewShape(), c.viewOutlineColor(), c.viewFillColor(), c.x_coord, c.y_coord);
+    		}
+    	}
+    	Main.critWorld.setGridLinesVisible(true);
     }
 
 	/* END --- NEW FOR PROJECT 5
@@ -562,6 +577,74 @@ public abstract class Critter {
     	offspring.move(direction);
 
     	babies.add(offspring);
+    }
+    
+    private static void place(CritterShape shape, Color outline, Color fill, int x, int y) {
+		Shape crit = null;
+		int size = 3;
+		
+		switch(shape) {
+		case CIRCLE:
+			crit = new Circle(size/2);
+			crit.setFill(fill);
+			crit.setStroke(outline);
+			break;
+		case SQUARE:
+			crit = new Rectangle(size,size);
+			crit.setFill(fill);
+			crit.setStroke(outline);
+			break;
+		case TRIANGLE:
+			Polygon triangle = new Polygon();
+			triangle.getPoints().addAll(new Double[]{
+					(double)size/2.0, 1.0,
+				    (double)size - 1.0, (double)size - 1.0,
+				    1.0, (double)size-1.0
+			});
+			crit = triangle;
+			crit.setFill(fill);
+			crit.setStroke(outline);
+			break;
+		case DIAMOND:
+			Polygon diamond = new Polygon();
+			diamond.getPoints().addAll(new Double[]{
+					(double)size/2.0, 1.0,
+					(double)size - 1.0, (double)size/2.0,
+					(double)size/2.0, (double)size - 1.0,
+					1.0, (double)size/2.0
+			});
+			crit = diamond;
+			crit.setFill(fill);
+			crit.setStroke(outline);
+			break;
+		case STAR:
+			Polygon star = new Polygon();
+			
+			Double[] points = {2050.0, 1500.0, 2170.0, 1860.0, 2590.0, 1860.0, 
+				      2230.0, 2040.0, 2330.0, 2460.0, 2050.0, 2220.0, 1770.0, 2460.0, 1870.0, 2040.0, 
+				      1510.0, 1860.0, 1930.0, 1860.0};
+			if(size <= 6) {
+				for(int i = 0; i < points.length; i++) {
+					points[i] = points[i]/(45*size^2);
+				}
+			}
+			else {
+				for(int i = 0; i < points.length; i++) {
+					points[i] = points[i]/(size*7);
+				}
+			}
+			 star.getPoints().addAll( points );
+			 crit=star;
+			 crit.setFill(fill);
+			 crit.setStroke(outline);
+			 break;
+		default:
+			break;
+		}
+		
+		
+		Main.critWorld.add(crit, x, y);
+		return;
     }
 
 
