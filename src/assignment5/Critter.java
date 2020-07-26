@@ -2,14 +2,14 @@
  * CRITTERS Critter.java
  * EE422C Project 5 submission by
  * Replace <...> with your actual data.
- * <Nafeezur Chowdhury>
- * <nrc865>
- * <75535>
  * <Pranesh Satish>
  * <ps32534>
- * <75535>
- * Slip days used: <0>
- * Spring 2019
+ * <Student1 5-digit Unique No.>
+ * <Nafeezur Chowdhury>
+ * <nrc865>
+ * <Student2 5-digit Unique No.>
+ * Slip days used: <1> (Second of our Three)
+ * Spring 2020
  */
 
 package assignment5;

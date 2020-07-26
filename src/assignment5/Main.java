@@ -1,6 +1,7 @@
 package assignment5;
 
 import java.io.File;
+
 import java.lang.reflect.Method;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -30,6 +31,19 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/*
+ * CRITTERS Main.java
+ * EE422C Project 5 submission by
+ * Replace <...> with your actual data.
+ * <Pranesh Satish>
+ * <ps32534>
+ * <Student1 5-digit Unique No.>
+ * <Nafeezur Chowdhury>
+ * <nrc865>
+ * <Student2 5-digit Unique No.>
+ * Slip days used: <1> (Second of our Three)
+ * Spring 2020
+ */
 public class Main extends Application {
 	
 	public static String myPackage = Main.class.getPackage().toString().split(" ")[1];

@@ -1,6 +1,20 @@
 package assignment5;
 
 /*
+ * CRITTERS Critter3.java
+ * EE422C Project 5 submission by
+ * Replace <...> with your actual data.
+ * <Pranesh Satish>
+ * <ps32534>
+ * <Student1 5-digit Unique No.>
+ * <Nafeezur Chowdhury>
+ * <nrc865>
+ * <Student2 5-digit Unique No.>
+ * Slip days used: <1> (Second of our Three)
+ * Spring 2020
+ */
+
+/*
  * Critter3
  * Critter3 cannot reproduce.
  * Critter3 is an absolute buffoon.
