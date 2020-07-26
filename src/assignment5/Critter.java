@@ -212,15 +212,24 @@ public abstract class Critter {
     public static void displayWorld() {
         // TODO Implement this method
     	Main.critWorld.getChildren().clear();
+    	paintGridLines();
     	for(Critter c: population) {
-    		if(Main.critWorld.contains((double)c.x_coord, (double)c.y_coord)) {
-    			continue;
-    		} else {
+    		//if(Main.critWorld.contains((double)c.x_coord, (double)c.y_coord)) {
+    			//continue;
+    		//} else {
     			place(c.viewShape(), c.viewOutlineColor(), c.viewFillColor(), c.x_coord, c.y_coord);
-    		}
+    		//}
     	}
-    	Main.critWorld.setGridLinesVisible(true);
+    	
     }
+    //from lecture on JavaFX
+    private static void paintGridLines() {
+    	for (int i = 0; i < Params.WORLD_WIDTH; i++) {
+    		for (int j = 0; j < Params.WORLD_HEIGHT; j++) {
+    			Shape s = new Rectangle(Main.shapeSize, Main.shapeSize);
+    			s.setFill(null);
+    			s.setStroke(Color.WHITE);
+    			Main.critWorld.add(s, i, j);}}}
 
 	/* END --- NEW FOR PROJECT 5
 			rest is unchanged from Project 4 */
@@ -581,7 +590,7 @@ public abstract class Critter {
     
     private static void place(CritterShape shape, Color outline, Color fill, int x, int y) {
 		Shape crit = null;
-		int size = 3;
+		int size = Main.shapeSize;
 		
 		switch(shape) {
 		case CIRCLE:

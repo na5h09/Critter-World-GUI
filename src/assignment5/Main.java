@@ -2,6 +2,7 @@ package assignment5;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +13,20 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.scene.media.AudioClip;
+import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -25,6 +36,7 @@ public class Main extends Application {
 	public static ArrayList<Label> Stats = new ArrayList<Label>();
 	public static ArrayList<String> critterChoices;
 	public static GridPane critWorld = new GridPane();
+	public static int shapeSize;
 	//used from http://www.java2s.com/Tutorials/Java/JavaFX/1010__JavaFX_Timeline_Animation.htm
 	public Timeline aniWorld = new Timeline();
 
@@ -85,7 +97,7 @@ public class Main extends Application {
     				for(int i = 0; i < num; i++) {
     					Critter.createCritter(make.getValue().toString());
     				}
-    				//need to write display function
+    				Critter.displayWorld();
     				statUpdate();
     			} catch (NumberFormatException | InvalidCritterException e) {
     				System.out.println("Error Creating Critters");
@@ -147,7 +159,7 @@ public class Main extends Application {
     				for(int i = 0; i < num; i++) {
     					Critter.worldTimeStep();
     				}
-    				//need to write display function
+    				Critter.displayWorld();
     				statUpdate();
     			} catch (NumberFormatException e) {
     				System.out.println("Error in Time Step");
@@ -156,8 +168,31 @@ public class Main extends Application {
     		}
     	});
     	
+    	//quit button
+    	Button quit = new Button("Quit");
+    	GridPane.setConstraints(quit, 0, 7);
+    	
+    	quit.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent event) {
+    			System.exit(0);
+    		}
+    	});
+    	
+    	//reset world
+    	Button reset = new Button("Reset");
+    	GridPane.setConstraints(reset, 1, 7);
+    	
+    	reset.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent event) {
+    			Critter.clearWorld();
+    			Critter.displayWorld();
+    		}
+    	});
+    	
     	//add controls to control pane
-    	ctPane.getChildren().addAll(make, makeTF, create, seedTF, seed, stepTF, timeStep);
+    	ctPane.getChildren().addAll(make, makeTF, create, seedTF, seed, stepTF, timeStep, quit, reset);
     	ctrl.setContent(ctPane);
     	
     	//animation tab
@@ -189,7 +224,7 @@ public class Main extends Application {
     					for(int i = 0; i < frame; i++) {
     						Critter.worldTimeStep();
     					}
-    					//write display world functions
+    					Critter.displayWorld();
     					statUpdate();
     				}
     			
@@ -210,6 +245,7 @@ public class Main extends Application {
     			seed.setDisable(false);
     			timeStep.setDisable(false);
     			aniWorld.stop();
+    			Critter.displayWorld();
     		}});
     	
     	anPane.getChildren().addAll(anislide, animateGo, animateStop);
@@ -243,19 +279,23 @@ public class Main extends Application {
     	
     	//add all tabs
     	tb.getTabs().addAll(ctrl, anime, stats);
-    	
+    	Rectangle2D bound = screenSize();
+    	shapeSize = (int) (((bound.getMaxX()/20) * 11) / Params.WORLD_WIDTH);
+    	tb.setMaxWidth(bound.getMaxX()/3);
     	//set Critter World
     	critWorld.setMinSize(Params.WORLD_WIDTH, Params.WORLD_HEIGHT);
-    	critWorld.setMaxSize(Params.WORLD_WIDTH * 5, Params.WORLD_HEIGHT * 5);
+    	critWorld.setMaxSize(((bound.getMaxX()/3) * 2), bound.getMaxY());
     	critWorld.setBackground(Background.EMPTY);
     	critWorld.setPadding(new Insets(10,10,10,10));
-    	critWorld.setGridLinesVisible(true);
     	Critter.displayWorld();
     	
     	//add all to splitpane which will be scene for stage
     	SplitPane sp = new SplitPane(tb, critWorld);
     	
-    	Scene scene = new Scene(sp, 500, 400);
+    	BackgroundFill bf = new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY);
+    	Background back = new Background(bf);
+    	sp.setBackground(back);
+    	Scene scene = new Scene(sp, 1000, 950);
     	primaryStage.setScene(scene);
     	primaryStage.show();
     }
@@ -308,6 +348,11 @@ public class Main extends Application {
     		
     		Stats.get(i).setText(newStats);
     	}
+    }
+    
+    public Rectangle2D screenSize() {
+    	Rectangle2D bounds = Screen.getPrimary().getBounds();
+    	return bounds;
     }
 }
 
